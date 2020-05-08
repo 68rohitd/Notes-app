@@ -1,15 +1,33 @@
 import React, { useRef, useEffect } from "react";
-import { StyleSheet, View, Animated } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Animated,
+  TouchableOpacity,
+  Text,
+} from "react-native";
+import { AntDesign } from "@expo/vector-icons";
 
 export default function Card(props) {
-  const fadeAnim = useRef(new Animated.Value(0)).current; // Initial value for opacity: 0
+  const fadeAnim = useRef(new Animated.Value(0)).current;
 
-  React.useEffect(() => {
+  useEffect(() => {
     Animated.timing(fadeAnim, {
       toValue: 1,
       duration: 500,
     }).start();
   }, []);
+
+  const fadeOut = () => {
+    Animated.timing(fadeAnim, {
+      toValue: 0,
+      duration: 200,
+    }).start();
+
+    setTimeout(() => {
+      props.onDelete();
+    }, 200);
+  };
 
   return (
     <Animated.View
@@ -18,7 +36,34 @@ export default function Card(props) {
         opacity: fadeAnim,
       }}
     >
-      <View style={styles.cardContent}>{props.children}</View>
+      <View style={styles.cardContent}>
+        <TouchableOpacity style={styles.icon} onPress={props.onToggleFinished}>
+          {props.item.finished.toString() === "true" ? (
+            <AntDesign name="checkcircle" size={24} color="#c9822a" />
+          ) : (
+            <AntDesign name="checkcircle" size={24} />
+          )}
+        </TouchableOpacity>
+
+        {props.item.finished === true ? (
+          <Text
+            style={{
+              ...styles.todoItem,
+              textDecorationLine: "line-through",
+              textDecorationStyle: "solid",
+              opacity: 0.4,
+            }}
+          >
+            {props.item.name}
+          </Text>
+        ) : (
+          <Text style={styles.todoItem}>{props.item.name}</Text>
+        )}
+
+        <TouchableOpacity style={styles.icon} onPress={fadeOut}>
+          <AntDesign name="closecircle" size={24} color="#c9822a" />
+        </TouchableOpacity>
+      </View>
     </Animated.View>
   );
 }
@@ -38,5 +83,16 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     marginVertical: 10,
     flexDirection: "row",
+  },
+
+  icon: {
+    marginLeft: "auto",
+  },
+
+  todoItem: {
+    marginLeft: 8,
+    fontSize: 18,
+    color: "white",
+    width: "82%",
   },
 });

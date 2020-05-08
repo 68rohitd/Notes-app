@@ -115,42 +115,14 @@ export default class Todos extends Component {
         <FlatList
           data={this.state.todos}
           renderItem={({ item }) => (
-            <Card>
-              <TouchableOpacity
-                style={styles.icon}
-                onPress={() => this.onToggleFinished(item.id)}
-              >
-                {item.finished.toString() === "true" ? (
-                  <AntDesign name="checkcircle" size={24} color="#c9822a" />
-                ) : (
-                  <AntDesign name="checkcircle" size={24} />
-                )}
-              </TouchableOpacity>
-
-              {item.finished === true ? (
-                <Text
-                  style={{
-                    ...styles.todoItem,
-                    textDecorationLine: "line-through",
-                    textDecorationStyle: "solid",
-                    opacity: 0.4,
-                  }}
-                >
-                  {item.name}
-                </Text>
-              ) : (
-                <Text style={styles.todoItem}>{item.name}</Text>
-              )}
-
-              <TouchableOpacity
-                style={styles.icon}
-                onPress={() => this.onDelete(item.id)}
-              >
-                <AntDesign name="closecircle" size={24} color="#c9822a" />
-              </TouchableOpacity>
-            </Card>
+            <Card
+              item={item}
+              onDelete={() => this.onDelete(item.id)}
+              onToggleFinished={() => this.onToggleFinished(item.id)}
+            />
           )}
         />
+
         <View style={styles.bottomPart}>
           <TextInput
             multiline
@@ -174,23 +146,12 @@ export default class Todos extends Component {
 }
 
 const styles = StyleSheet.create({
-  icon: {
-    marginLeft: "auto",
-  },
-
   container: {
     flex: 1,
     paddingTop: 60,
     paddingBottom: 10,
     paddingHorizontal: 10,
     backgroundColor: "#2A345D",
-  },
-
-  todoItem: {
-    marginLeft: 8,
-    fontSize: 18,
-    color: "white",
-    width: "82%",
   },
 
   todoInput: {
