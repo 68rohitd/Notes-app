@@ -29,12 +29,11 @@ export default class Todos extends Component {
     try {
       let data = await AsyncStorage.getItem("a");
       data = JSON.parse(data);
-      console.log("data: ", data);
 
-      // set state
       this.setState({
-        todos: [...data, ...this.state.todos],
+        todos: [...data],
       });
+      console.log("Todos: ", this.state.todos);
     } catch (e) {
       let data = [];
       await AsyncStorage.setItem("a", JSON.stringify(data));
@@ -52,27 +51,14 @@ export default class Todos extends Component {
         finished: false,
       };
 
+      //   save to async
+      const allData = [newTodo, ...this.state.todos];
+      await AsyncStorage.setItem("a", JSON.stringify(allData));
+
       this.setState({
         todos: [newTodo, ...this.state.todos],
       });
-
       this.setState({ todoInput: "" });
-
-      // saving to localstorage
-      //1. get data
-      try {
-        const data = await AsyncStorage.getItem("a");
-        var newData = JSON.parse(data);
-      } catch (e) {
-        console.log(e);
-      }
-
-      //2. update data
-      newData.push(newTodo);
-      console.log("data: ", newData);
-
-      //3. save data
-      await AsyncStorage.setItem("a", JSON.stringify(newData));
     }
 
     Keyboard.dismiss();
@@ -96,11 +82,28 @@ export default class Todos extends Component {
     console.log("deleted: ", id);
   };
 
+  onToggleFinished = async (id) => {
+    let allData = await AsyncStorage.getItem("a");
+    allData = JSON.parse(allData);
+
+    allData.map((person) => {
+      if (person.id === id) {
+        person.finished = !person.finished;
+      }
+    });
+
+    await AsyncStorage.setItem("a", JSON.stringify(allData));
+
+    this.setState({
+      todos: [...allData],
+    });
+  };
+
   render() {
     return (
       <View style={styles.container}>
         <LinearGradient
-          colors={["#2A345D", "#1C245A"]}
+          colors={["#0a1040", "#2e3880"]}
           style={{
             position: "absolute",
             left: 0,
@@ -115,23 +118,28 @@ export default class Todos extends Component {
             <Card>
               <TouchableOpacity
                 style={styles.icon}
-                // onPress={() => this.onFinished(item.id)}
+                onPress={() => this.onToggleFinished(item.id)}
               >
-                <AntDesign name="checkcircle" size={24} />
+                {item.finished.toString() === "true" ? (
+                  <AntDesign name="checkcircle" size={24} color="#c9822a" />
+                ) : (
+                  <AntDesign name="checkcircle" size={24} />
+                )}
               </TouchableOpacity>
 
-              {item.finished.toString() === "true" ? (
+              {item.finished === true ? (
                 <Text
                   style={{
                     ...styles.todoItem,
                     textDecorationLine: "line-through",
                     textDecorationStyle: "solid",
+                    opacity: 0.4,
                   }}
                 >
-                  {item.name.toString()}
+                  {item.name}
                 </Text>
               ) : (
-                <Text style={styles.todoItem}>{item.name.toString()}</Text>
+                <Text style={styles.todoItem}>{item.name}</Text>
               )}
 
               <TouchableOpacity
@@ -143,7 +151,7 @@ export default class Todos extends Component {
             </Card>
           )}
         />
-        <View style={{ marginBottom: 20 }}>
+        <View style={styles.bottomPart}>
           <TextInput
             multiline
             style={styles.todoInput}
@@ -179,10 +187,10 @@ const styles = StyleSheet.create({
   },
 
   todoItem: {
-    marginLeft: 10,
+    marginLeft: 8,
     fontSize: 18,
     color: "white",
-    width: "88%",
+    width: "82%",
   },
 
   todoInput: {
@@ -193,9 +201,23 @@ const styles = StyleSheet.create({
     fontSize: 18,
     borderRadius: 15,
     marginBottom: 10,
+    width: "80%",
+    alignSelf: "center",
   },
 
   btn: {
     alignSelf: "center",
+  },
+
+  bottomPart: {
+    backgroundColor: "#151d3d",
+    paddingTop: 35,
+    paddingBottom: 5,
+    marginBottom: -10,
+    marginTop: 10,
+    alignSelf: "center",
+    width: "120%",
+    borderTopLeftRadius: 100,
+    borderTopRightRadius: 100,
   },
 });

@@ -1,18 +1,29 @@
-import React from "react";
-import { StyleSheet, View } from "react-native";
+import React, { useRef, useEffect } from "react";
+import { StyleSheet, View, Animated } from "react-native";
 
 export default function Card(props) {
+  const fadeAnim = useRef(new Animated.Value(0)).current; // Initial value for opacity: 0
+
+  React.useEffect(() => {
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 500,
+    }).start();
+  }, []);
+
   return (
-    <View style={styles.card}>
+    <Animated.View
+      style={{
+        ...styles.card,
+        opacity: fadeAnim,
+      }}
+    >
       <View style={styles.cardContent}>{props.children}</View>
-    </View>
+    </Animated.View>
   );
 }
-
 const styles = StyleSheet.create({
   card: {
-    // width: "90%",
-    // alignSelf: "center",
     borderRadius: 15,
     elevation: 3,
     backgroundColor: "#3b4982",
