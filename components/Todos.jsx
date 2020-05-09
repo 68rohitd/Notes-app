@@ -2,17 +2,18 @@ import React, { Component } from "react";
 import {
   StyleSheet,
   View,
-  Text,
   FlatList,
   TouchableOpacity,
   TextInput,
   AsyncStorage,
-  Alert,
+  ToastAndroid,
   Keyboard,
+  Text,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import Card from "./Card";
+import { time } from "./getTime";
 
 export default class Todos extends Component {
   constructor() {
@@ -43,10 +44,11 @@ export default class Todos extends Component {
 
   onAdd = async () => {
     if (this.state.todoInput === "") {
-      Alert.alert("Oops", "Please enter a todo!");
+      ToastAndroid.show("Please enter a todo!", ToastAndroid.SHORT);
     } else {
       const newTodo = {
         id: Math.random().toString(),
+        time: time(),
         name: this.state.todoInput,
         finished: false,
       };
@@ -83,15 +85,38 @@ export default class Todos extends Component {
   };
 
   onToggleFinished = async (id) => {
+    // fetch all data from asyncStorage
     let allData = await AsyncStorage.getItem("a");
     allData = JSON.parse(allData);
 
+    // toggle finished property
+    // 1.checking ticking or unticking...
+    let taskDone = true;
+    // 2. toggling
     allData.map((person) => {
       if (person.id === id) {
         person.finished = !person.finished;
+
+        if (person.finished === true) {
+          taskDone = true;
+        } else {
+          taskDone = false;
+        }
       }
     });
 
+    // if clicked to finish task, push to bottom, else if clicked to unfinish task, push to top !
+    let notFinishedTodos = allData.filter((person) => person.id !== id);
+    let singleTodo = allData.filter((person) => person.id === id);
+
+    if (taskDone === true) {
+      notFinishedTodos.push(singleTodo[0]);
+    } else {
+      notFinishedTodos = [singleTodo[0], ...notFinishedTodos];
+    }
+
+    allData = notFinishedTodos;
+    // saving back to asyncStorage
     await AsyncStorage.setItem("a", JSON.stringify(allData));
 
     this.setState({
@@ -112,6 +137,18 @@ export default class Todos extends Component {
             height: 1000,
           }}
         />
+
+        {this.state.todos.length === 0 ? (
+          <View
+            style={{
+              flex: 1,
+              justifyContent: "center",
+            }}
+          >
+            <Text style={styles.emptyTodosText}>Enter your First Task!</Text>
+          </View>
+        ) : null}
+
         <FlatList
           data={this.state.todos}
           renderItem={({ item }) => (
@@ -127,11 +164,17 @@ export default class Todos extends Component {
           <TextInput
             multiline
             style={styles.todoInput}
-            placeholder="Enter your Todo!"
+            placeholder="Add Task"
             onChangeText={(text) => this.setState({ todoInput: text })}
             value={this.state.todoInput}
           />
-          <TouchableOpacity onPress={this.onAdd}>
+          <TouchableOpacity
+            style={{
+              width: 50,
+              alignSelf: "center",
+            }}
+            onPress={this.onAdd}
+          >
             <AntDesign
               style={styles.btn}
               name="pluscircle"
@@ -148,10 +191,20 @@ export default class Todos extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 60,
     paddingBottom: 10,
     paddingHorizontal: 10,
     backgroundColor: "#2A345D",
+  },
+
+  emptyTodosText: {
+    color: "white",
+    fontSize: 20,
+    borderColor: "#A3661C",
+    backgroundColor: "#151d3d",
+    borderWidth: 2,
+    borderRadius: 15,
+    alignSelf: "center",
+    padding: 20,
   },
 
   todoInput: {
@@ -172,13 +225,13 @@ const styles = StyleSheet.create({
 
   bottomPart: {
     backgroundColor: "#151d3d",
-    paddingTop: 35,
+    paddingTop: 20,
     paddingBottom: 5,
     marginBottom: -10,
     marginTop: 10,
     alignSelf: "center",
     width: "120%",
-    borderTopLeftRadius: 100,
-    borderTopRightRadius: 100,
+    borderTopLeftRadius: 70,
+    borderTopRightRadius: 70,
   },
 });

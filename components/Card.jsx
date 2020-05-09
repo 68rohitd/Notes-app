@@ -37,8 +37,11 @@ export default function Card(props) {
       }}
     >
       <View style={styles.cardContent}>
-        <TouchableOpacity style={styles.icon} onPress={props.onToggleFinished}>
-          {props.item.finished.toString() === "true" ? (
+        <TouchableOpacity
+          style={{ marginLeft: 0 }}
+          onPress={props.onToggleFinished}
+        >
+          {props.item.finished === true ? (
             <AntDesign name="checkcircle" size={24} color="#c9822a" />
           ) : (
             <AntDesign name="checkcircle" size={24} />
@@ -46,21 +49,49 @@ export default function Card(props) {
         </TouchableOpacity>
 
         {props.item.finished === true ? (
-          <Text
-            style={{
-              ...styles.todoItem,
-              textDecorationLine: "line-through",
-              textDecorationStyle: "solid",
-              opacity: 0.4,
-            }}
-          >
-            {props.item.name}
-          </Text>
+          <View style={{ marginLeft: 5 }}>
+            <View style={{ opacity: 0.7, flexDirection: "row" }}>
+              <AntDesign
+                style={{ marginHorizontal: 5, marginBottom: 5 }}
+                name="clockcircleo"
+                size={15}
+                color="white"
+              />
+              <Text style={{ color: "white", fontSize: 10 }}>
+                {props.item.time}
+              </Text>
+            </View>
+
+            <Text
+              style={{
+                ...styles.todoItem,
+                textDecorationLine: "line-through",
+                textDecorationStyle: "solid",
+                opacity: 0.4,
+              }}
+            >
+              {props.item.name}
+            </Text>
+          </View>
         ) : (
-          <Text style={styles.todoItem}>{props.item.name}</Text>
+          <View style={{ marginLeft: 5 }}>
+            <View style={{ opacity: 0.7, flexDirection: "row" }}>
+              <AntDesign
+                style={{ marginHorizontal: 5, marginBottom: 5 }}
+                name="clockcircleo"
+                size={15}
+                color="white"
+              />
+              <Text style={{ color: "white", fontSize: 10 }}>
+                {props.item.time}
+              </Text>
+            </View>
+
+            <Text style={styles.todoItem}>{props.item.name}</Text>
+          </View>
         )}
 
-        <TouchableOpacity style={styles.icon} onPress={fadeOut}>
+        <TouchableOpacity style={{ marginLeft: "auto" }} onPress={fadeOut}>
           <AntDesign name="closecircle" size={24} color="#c9822a" />
         </TouchableOpacity>
       </View>
@@ -69,7 +100,7 @@ export default function Card(props) {
 }
 const styles = StyleSheet.create({
   card: {
-    borderRadius: 15,
+    borderRadius: 8,
     elevation: 3,
     backgroundColor: "#3b4982",
     shadowOffset: { width: 1, height: 1 },
@@ -85,14 +116,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
 
-  icon: {
-    marginLeft: "auto",
-  },
-
   todoItem: {
     marginLeft: 8,
-    fontSize: 18,
+    lineHeight: 25,
+    fontSize: 16,
     color: "white",
-    width: "82%",
+    marginRight: 55,
   },
 });

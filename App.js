@@ -1,15 +1,14 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View } from "react-native";
 import Todos from "./components/Todos";
+import Header from "./components/Header";
 
 export default class App extends Component {
   render() {
-    return <Todos style={styles.container} />;
+    return (
+      <>
+        <Header />
+        <Todos />
+      </>
+    );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    padding: 40,
-  },
-});
