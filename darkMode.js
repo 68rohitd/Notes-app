@@ -3,16 +3,14 @@ import { StyleSheet } from "react-native";
 export const header = StyleSheet.create({
   header: {
     paddingTop: 30,
-    backgroundColor: "#ebebeb",
+    backgroundColor: "#1c1c1c",
     flexDirection: "row",
   },
 
   headerText: {
     padding: 10,
-    color: "#303030",
+    color: "white",
     fontSize: 30,
-    fontWeight: "bold",
-    flex: 2,
   },
 });
 
@@ -20,7 +18,11 @@ export const card = StyleSheet.create({
   card: {
     borderRadius: 8,
     elevation: 3,
-    backgroundColor: "white",
+    backgroundColor: "#141414",
+    shadowOffset: { width: 1, height: 1 },
+    shadowColor: "#333",
+    shadowOpacity: 0.3,
+    shadowRadius: 2,
     marginHorizontal: 4,
     marginVertical: 6,
   },
@@ -34,7 +36,7 @@ export const card = StyleSheet.create({
     marginLeft: 8,
     lineHeight: 25,
     fontSize: 16,
-    color: "#303030",
+    color: "white",
     marginRight: 55,
   },
 });
@@ -44,33 +46,30 @@ export const todos = StyleSheet.create({
     flex: 1,
     paddingBottom: 10,
     paddingHorizontal: 10,
-    backgroundColor: "#ebebeb",
+    backgroundColor: "#2b2b2b",
   },
 
   emptyTodosText: {
-    color: "#303030",
+    color: "white",
     fontSize: 20,
-    borderColor: "#fca944",
-    backgroundColor: "white",
+    borderColor: "#A3661C",
+    backgroundColor: "#151d3d",
     borderWidth: 2,
     borderRadius: 15,
     alignSelf: "center",
     padding: 20,
-    elevation: 3,
   },
 
   todoInput: {
-    backgroundColor: "white",
     borderWidth: 2,
-    borderColor: "#fca944",
-    color: "black",
+    borderColor: "#A3661C",
+    color: "white",
     padding: 10,
     fontSize: 18,
     borderRadius: 15,
     marginBottom: 10,
     width: "90%",
     alignSelf: "center",
-    elevation: 2,
   },
 
   btn: {
@@ -78,10 +77,14 @@ export const todos = StyleSheet.create({
   },
 
   bottomPart: {
+    backgroundColor: "#1c1c1c",
     paddingTop: 20,
     paddingBottom: 5,
     marginBottom: -10,
+    // marginTop: 3,
     alignSelf: "center",
     width: "110%",
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
   },
 });

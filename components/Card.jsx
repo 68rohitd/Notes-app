@@ -1,5 +1,11 @@
 import React from "react";
-import { View, Animated, TouchableOpacity, Text } from "react-native";
+import {
+  View,
+  Animated,
+  TouchableOpacity,
+  Text,
+  TouchableOpacityComponent,
+} from "react-native";
 import {
   Menu,
   MenuOptions,
@@ -8,6 +14,10 @@ import {
 } from "react-native-popup-menu";
 import { card } from "../globalStyle";
 import { AntDesign } from "@expo/vector-icons";
+import {
+  TouchableWithoutFeedback,
+  TouchableHighlight,
+} from "react-native-gesture-handler";
 
 export default class Card extends React.Component {
   constructor() {
@@ -40,8 +50,9 @@ export default class Card extends React.Component {
 
   render() {
     return (
-      <TouchableOpacity
-        activeOpacity={0.7}
+      <TouchableHighlight
+        activeOpacity={0.8}
+        underlayColor="#ebebeb"
         onLongPress={() => this.menu.open()}
       >
         <Animated.View
@@ -57,9 +68,9 @@ export default class Card extends React.Component {
               onPress={this.props.onToggleFinished}
             >
               {this.props.item.finished === true ? (
-                <AntDesign name="checkcircle" size={24} color="#c9822a" />
+                <AntDesign name="checkcircle" size={24} color="#fca944" />
               ) : (
-                <AntDesign name="checkcircle" size={24} color="grey" />
+                <AntDesign name="checkcircle" size={24} color="#303030" />
               )}
             </TouchableOpacity>
             {/* task content */}
@@ -70,9 +81,9 @@ export default class Card extends React.Component {
                     style={{ marginHorizontal: 5, marginBottom: 5 }}
                     name="clockcircleo"
                     size={15}
-                    color="white"
+                    color="black"
                   />
-                  <Text style={{ color: "white", fontSize: 10 }}>
+                  <Text style={{ color: "black", fontSize: 10 }}>
                     {this.props.item.time}
                   </Text>
                 </View>
@@ -94,9 +105,9 @@ export default class Card extends React.Component {
                     style={{ marginHorizontal: 5, marginBottom: 5 }}
                     name="clockcircleo"
                     size={15}
-                    color="white"
+                    color="black"
                   />
-                  <Text style={{ color: "white", fontSize: 10 }}>
+                  <Text style={{ color: "black", fontSize: 10 }}>
                     {this.props.item.time}
                   </Text>
                 </View>
@@ -117,7 +128,7 @@ export default class Card extends React.Component {
                 <MenuOption
                   onSelect={this.props.onEdit}
                   text="Edit this task"
-                  style={{ padding: 10 }}
+                  style={{ padding: 10, backgroundColor: "#fca944" }}
                 />
               </MenuOptions>
             </Menu>
@@ -127,11 +138,11 @@ export default class Card extends React.Component {
               style={{ marginLeft: "auto", height: 25 }}
               onPress={this.fadeOut}
             >
-              <AntDesign name="closecircle" size={24} color="#c9822a" />
+              <AntDesign name="closecircle" size={24} color="#fca944" />
             </TouchableOpacity>
           </View>
         </Animated.View>
-      </TouchableOpacity>
+      </TouchableHighlight>
     );
   }
 }

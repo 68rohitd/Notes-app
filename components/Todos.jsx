@@ -10,7 +10,6 @@ import {
   Text,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
 import Card from "./Card";
 import { time } from "./getTime";
 import { todos } from "../globalStyle";
@@ -138,17 +137,6 @@ export default class Todos extends Component {
   render() {
     return (
       <View style={todos.container}>
-        {/* <LinearGradient
-          colors={["#0a1040", "#2e3880"]}
-          style={{
-            position: "absolute",
-            left: 0,
-            right: 0,
-            top: 0,
-            height: 1000,
-          }}
-        /> */}
-
         {this.state.todos.length === 0 ? (
           <View
             style={{
@@ -192,7 +180,7 @@ export default class Todos extends Component {
               style={todos.btn}
               name="pluscircle"
               size={44}
-              color="#A3661C"
+              color="#fca944"
             />
           </TouchableOpacity>
         </View>
