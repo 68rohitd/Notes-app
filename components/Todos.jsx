@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import {
-  StyleSheet,
   View,
   FlatList,
   TouchableOpacity,
@@ -14,6 +13,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import Card from "./Card";
 import { time } from "./getTime";
+import { todos } from "../globalStyle";
 
 export default class Todos extends Component {
   constructor() {
@@ -137,8 +137,8 @@ export default class Todos extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <LinearGradient
+      <View style={todos.container}>
+        {/* <LinearGradient
           colors={["#0a1040", "#2e3880"]}
           style={{
             position: "absolute",
@@ -147,7 +147,7 @@ export default class Todos extends Component {
             top: 0,
             height: 1000,
           }}
-        />
+        /> */}
 
         {this.state.todos.length === 0 ? (
           <View
@@ -156,7 +156,7 @@ export default class Todos extends Component {
               justifyContent: "center",
             }}
           >
-            <Text style={styles.emptyTodosText}>Enter your First Task!</Text>
+            <Text style={todos.emptyTodosText}>Enter your First Task!</Text>
           </View>
         ) : null}
 
@@ -172,11 +172,11 @@ export default class Todos extends Component {
           )}
         />
 
-        <View style={styles.bottomPart}>
+        <View style={todos.bottomPart}>
           <TextInput
             ref={this.textInput}
             multiline
-            style={styles.todoInput}
+            style={todos.todoInput}
             placeholder="Add Task"
             onChangeText={(text) => this.setState({ todoInput: text })}
             value={this.state.todoInput}
@@ -189,7 +189,7 @@ export default class Todos extends Component {
             onPress={this.onAdd}
           >
             <AntDesign
-              style={styles.btn}
+              style={todos.btn}
               name="pluscircle"
               size={44}
               color="#A3661C"
@@ -200,51 +200,3 @@ export default class Todos extends Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingBottom: 10,
-    paddingHorizontal: 10,
-    backgroundColor: "#2A345D",
-  },
-
-  emptyTodosText: {
-    color: "white",
-    fontSize: 20,
-    borderColor: "#A3661C",
-    backgroundColor: "#151d3d",
-    borderWidth: 2,
-    borderRadius: 15,
-    alignSelf: "center",
-    padding: 20,
-  },
-
-  todoInput: {
-    borderWidth: 2,
-    borderColor: "#A3661C",
-    color: "white",
-    padding: 10,
-    fontSize: 18,
-    borderRadius: 15,
-    marginBottom: 10,
-    width: "90%",
-    alignSelf: "center",
-  },
-
-  btn: {
-    alignSelf: "center",
-  },
-
-  bottomPart: {
-    backgroundColor: "#151d3d",
-    paddingTop: 20,
-    paddingBottom: 5,
-    marginBottom: -10,
-    // marginTop: 3,
-    alignSelf: "center",
-    width: "110%",
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-  },
-});

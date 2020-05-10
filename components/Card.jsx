@@ -1,18 +1,12 @@
 import React from "react";
-import {
-  StyleSheet,
-  View,
-  Animated,
-  TouchableOpacity,
-  Text,
-} from "react-native";
+import { View, Animated, TouchableOpacity, Text } from "react-native";
 import {
   Menu,
   MenuOptions,
   MenuOption,
   MenuTrigger,
 } from "react-native-popup-menu";
-
+import { card } from "../globalStyle";
 import { AntDesign } from "@expo/vector-icons";
 
 export default class Card extends React.Component {
@@ -52,11 +46,11 @@ export default class Card extends React.Component {
       >
         <Animated.View
           style={{
-            ...styles.card,
+            ...card.card,
             opacity: this.fadeAnim,
           }}
         >
-          <View style={styles.cardContent}>
+          <View style={card.cardContent}>
             {/* toggle finished */}
             <TouchableOpacity
               style={{ marginLeft: 0, height: 25 }}
@@ -65,7 +59,7 @@ export default class Card extends React.Component {
               {this.props.item.finished === true ? (
                 <AntDesign name="checkcircle" size={24} color="#c9822a" />
               ) : (
-                <AntDesign name="checkcircle" size={24} />
+                <AntDesign name="checkcircle" size={24} color="grey" />
               )}
             </TouchableOpacity>
             {/* task content */}
@@ -84,7 +78,7 @@ export default class Card extends React.Component {
                 </View>
                 <Text
                   style={{
-                    ...styles.todoItem,
+                    ...card.todoItem,
                     textDecorationLine: "line-through",
                     textDecorationStyle: "solid",
                     opacity: 0.4,
@@ -106,7 +100,7 @@ export default class Card extends React.Component {
                     {this.props.item.time}
                   </Text>
                 </View>
-                <Text style={styles.todoItem}>{this.props.item.name}</Text>
+                <Text style={card.todoItem}>{this.props.item.name}</Text>
               </View>
             )}
 
@@ -141,30 +135,3 @@ export default class Card extends React.Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  card: {
-    borderRadius: 8,
-    elevation: 3,
-    backgroundColor: "#3b4982",
-    shadowOffset: { width: 1, height: 1 },
-    shadowColor: "#333",
-    shadowOpacity: 0.3,
-    shadowRadius: 2,
-    marginHorizontal: 4,
-    marginVertical: 6,
-  },
-  cardContent: {
-    marginHorizontal: 10,
-    marginVertical: 10,
-    flexDirection: "row",
-  },
-
-  todoItem: {
-    marginLeft: 8,
-    lineHeight: 25,
-    fontSize: 16,
-    color: "white",
-    marginRight: 55,
-  },
-});
