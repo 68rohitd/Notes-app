@@ -1,5 +1,20 @@
 export const time = () => {
   let date = new Date();
+  const monthNames = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sept",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+
   let hours = date.getHours();
   let minutes = date.getMinutes();
 
@@ -7,7 +22,17 @@ export const time = () => {
   hours = hours % 12;
   hours = hours ? hours : 12;
   minutes = minutes < 10 ? "0" + minutes : minutes;
-  return hours + ":" + minutes + " " + ampm;
+  return (
+    hours +
+    ":" +
+    minutes +
+    " " +
+    ampm +
+    " " +
+    date.getDate() +
+    "/" +
+    monthNames[date.getMonth()]
+  );
 };
 
 export const greet = () => {

@@ -19,6 +19,8 @@ export default class Todos extends Component {
   constructor() {
     super();
 
+    this.textInput = React.createRef();
+
     this.state = {
       todos: [],
       todoInput: "",
@@ -60,7 +62,9 @@ export default class Todos extends Component {
       this.setState({
         todos: [newTodo, ...this.state.todos],
       });
-      this.setState({ todoInput: "" });
+      this.setState({
+        todoInput: "",
+      });
     }
 
     Keyboard.dismiss();
@@ -82,6 +86,13 @@ export default class Todos extends Component {
       console.log(e);
     }
     console.log("deleted: ", id);
+  };
+
+  onEdit = (item) => {
+    this.setState({ todoInput: item.name }, () => {
+      this.onDelete(item.id);
+    });
+    this.textInput.current.focus();
   };
 
   onToggleFinished = async (id) => {
@@ -155,6 +166,7 @@ export default class Todos extends Component {
             <Card
               item={item}
               onDelete={() => this.onDelete(item.id)}
+              onEdit={() => this.onEdit(item)}
               onToggleFinished={() => this.onToggleFinished(item.id)}
             />
           )}
@@ -162,6 +174,7 @@ export default class Todos extends Component {
 
         <View style={styles.bottomPart}>
           <TextInput
+            ref={this.textInput}
             multiline
             style={styles.todoInput}
             placeholder="Add Task"
@@ -215,7 +228,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     borderRadius: 15,
     marginBottom: 10,
-    width: "80%",
+    width: "90%",
     alignSelf: "center",
   },
 
@@ -228,10 +241,10 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     paddingBottom: 5,
     marginBottom: -10,
-    marginTop: 10,
+    // marginTop: 3,
     alignSelf: "center",
-    width: "120%",
-    borderTopLeftRadius: 70,
-    borderTopRightRadius: 70,
+    width: "110%",
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
   },
 });

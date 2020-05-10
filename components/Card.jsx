@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React from "react";
 import {
   StyleSheet,
   View,
@@ -6,98 +6,142 @@ import {
   TouchableOpacity,
   Text,
 } from "react-native";
+import {
+  Menu,
+  MenuOptions,
+  MenuOption,
+  MenuTrigger,
+} from "react-native-popup-menu";
+
 import { AntDesign } from "@expo/vector-icons";
 
-export default function Card(props) {
-  const fadeAnim = useRef(new Animated.Value(0)).current;
+export default class Card extends React.Component {
+  constructor() {
+    super();
 
-  useEffect(() => {
-    Animated.timing(fadeAnim, {
+    this.fadeAnim = new Animated.Value(0);
+  }
+
+  componentDidMount() {
+    Animated.timing(this.fadeAnim, {
       toValue: 1,
-      duration: 500,
+      duration: 1000,
     }).start();
-  }, []);
+  }
 
-  const fadeOut = () => {
-    Animated.timing(fadeAnim, {
+  fadeOut = () => {
+    Animated.timing(this.fadeAnim, {
       toValue: 0,
       duration: 200,
     }).start();
 
     setTimeout(() => {
-      props.onDelete();
+      this.props.onDelete();
     }, 200);
   };
 
-  return (
-    <Animated.View
-      style={{
-        ...styles.card,
-        opacity: fadeAnim,
-      }}
-    >
-      <View style={styles.cardContent}>
-        <TouchableOpacity
-          style={{ marginLeft: 0 }}
-          onPress={props.onToggleFinished}
+  openMenu = () => {
+    this.menu.open();
+  };
+
+  render() {
+    return (
+      <TouchableOpacity
+        activeOpacity={0.7}
+        onLongPress={() => this.menu.open()}
+      >
+        <Animated.View
+          style={{
+            ...styles.card,
+            opacity: this.fadeAnim,
+          }}
         >
-          {props.item.finished === true ? (
-            <AntDesign name="checkcircle" size={24} color="#c9822a" />
-          ) : (
-            <AntDesign name="checkcircle" size={24} />
-          )}
-        </TouchableOpacity>
-
-        {props.item.finished === true ? (
-          <View style={{ marginLeft: 5 }}>
-            <View style={{ opacity: 0.7, flexDirection: "row" }}>
-              <AntDesign
-                style={{ marginHorizontal: 5, marginBottom: 5 }}
-                name="clockcircleo"
-                size={15}
-                color="white"
-              />
-              <Text style={{ color: "white", fontSize: 10 }}>
-                {props.item.time}
-              </Text>
-            </View>
-
-            <Text
-              style={{
-                ...styles.todoItem,
-                textDecorationLine: "line-through",
-                textDecorationStyle: "solid",
-                opacity: 0.4,
-              }}
+          <View style={styles.cardContent}>
+            {/* toggle finished */}
+            <TouchableOpacity
+              style={{ marginLeft: 0, height: 25 }}
+              onPress={this.props.onToggleFinished}
             >
-              {props.item.name}
-            </Text>
-          </View>
-        ) : (
-          <View style={{ marginLeft: 5 }}>
-            <View style={{ opacity: 0.7, flexDirection: "row" }}>
-              <AntDesign
-                style={{ marginHorizontal: 5, marginBottom: 5 }}
-                name="clockcircleo"
-                size={15}
-                color="white"
-              />
-              <Text style={{ color: "white", fontSize: 10 }}>
-                {props.item.time}
-              </Text>
-            </View>
+              {this.props.item.finished === true ? (
+                <AntDesign name="checkcircle" size={24} color="#c9822a" />
+              ) : (
+                <AntDesign name="checkcircle" size={24} />
+              )}
+            </TouchableOpacity>
+            {/* task content */}
+            {this.props.item.finished === true ? (
+              <View style={{ marginLeft: 5 }}>
+                <View style={{ opacity: 0.7, flexDirection: "row" }}>
+                  <AntDesign
+                    style={{ marginHorizontal: 5, marginBottom: 5 }}
+                    name="clockcircleo"
+                    size={15}
+                    color="white"
+                  />
+                  <Text style={{ color: "white", fontSize: 10 }}>
+                    {this.props.item.time}
+                  </Text>
+                </View>
+                <Text
+                  style={{
+                    ...styles.todoItem,
+                    textDecorationLine: "line-through",
+                    textDecorationStyle: "solid",
+                    opacity: 0.4,
+                  }}
+                >
+                  {this.props.item.name}
+                </Text>
+              </View>
+            ) : (
+              <View style={{ marginLeft: 5 }}>
+                <View style={{ opacity: 0.7, flexDirection: "row" }}>
+                  <AntDesign
+                    style={{ marginHorizontal: 5, marginBottom: 5 }}
+                    name="clockcircleo"
+                    size={15}
+                    color="white"
+                  />
+                  <Text style={{ color: "white", fontSize: 10 }}>
+                    {this.props.item.time}
+                  </Text>
+                </View>
+                <Text style={styles.todoItem}>{this.props.item.name}</Text>
+              </View>
+            )}
 
-            <Text style={styles.todoItem}>{props.item.name}</Text>
-          </View>
-        )}
+            {/* popup */}
+            <Menu ref={(c) => (this.menu = c)}>
+              <MenuTrigger
+                customStyles={{
+                  triggerTouchable: {
+                    onLongPress: () => this.menu.open(),
+                  },
+                }}
+              ></MenuTrigger>
+              <MenuOptions>
+                <MenuOption
+                  onSelect={this.props.onEdit}
+                  text="Edit this task"
+                  style={{ padding: 10 }}
+                />
+              </MenuOptions>
+            </Menu>
 
-        <TouchableOpacity style={{ marginLeft: "auto" }} onPress={fadeOut}>
-          <AntDesign name="closecircle" size={24} color="#c9822a" />
-        </TouchableOpacity>
-      </View>
-    </Animated.View>
-  );
+            {/* delete task */}
+            <TouchableOpacity
+              style={{ marginLeft: "auto", height: 25 }}
+              onPress={this.fadeOut}
+            >
+              <AntDesign name="closecircle" size={24} color="#c9822a" />
+            </TouchableOpacity>
+          </View>
+        </Animated.View>
+      </TouchableOpacity>
+    );
+  }
 }
+
 const styles = StyleSheet.create({
   card: {
     borderRadius: 8,
