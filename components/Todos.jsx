@@ -52,6 +52,7 @@ export default class Todos extends Component {
         time: time(),
         name: this.state.todoInput,
         finished: false,
+        markAsImp: false,
       };
 
       //   save to async
@@ -134,6 +135,24 @@ export default class Todos extends Component {
     });
   };
 
+  onMarkAsImp = async (item) => {
+    // fetch all data
+    let allData = await AsyncStorage.getItem("a");
+    allData = JSON.parse(allData);
+    allData.map((task) => {
+      if (task.id === item.id) {
+        task.markAsImp = !task.markAsImp;
+      }
+    });
+    console.log("changed: ", allData);
+    // save to asyncstorage
+    await AsyncStorage.setItem("a", JSON.stringify(allData));
+
+    this.setState({
+      todos: [...allData],
+    });
+  };
+
   render() {
     return (
       <View style={todos.container}>
@@ -156,6 +175,7 @@ export default class Todos extends Component {
               onDelete={() => this.onDelete(item.id)}
               onEdit={() => this.onEdit(item)}
               onToggleFinished={() => this.onToggleFinished(item.id)}
+              onMarkAsImp={() => this.onMarkAsImp(item)}
             />
           )}
         />

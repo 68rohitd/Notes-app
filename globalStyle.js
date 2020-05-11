@@ -23,11 +23,25 @@ export const card = StyleSheet.create({
     backgroundColor: "white",
     marginHorizontal: 4,
     marginVertical: 6,
+    alignSelf: "center",
   },
+
+  impCard: {
+    borderRadius: 8,
+    elevation: 3,
+    backgroundColor: "white",
+    marginHorizontal: 4,
+    marginVertical: 6,
+    alignSelf: "center",
+    borderLeftWidth: 4,
+    borderLeftColor: "#ff5757",
+  },
+
   cardContent: {
     marginHorizontal: 10,
     marginVertical: 10,
     flexDirection: "row",
+    // width: 300,
   },
 
   todoItem: {
@@ -70,7 +84,7 @@ export const todos = StyleSheet.create({
     marginBottom: 10,
     width: "90%",
     alignSelf: "center",
-    elevation: 2,
+    elevation: 1,
   },
 
   btn: {

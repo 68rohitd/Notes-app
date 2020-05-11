@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  View,
-  Animated,
-  TouchableOpacity,
-  Text,
-  TouchableOpacityComponent,
-} from "react-native";
+import { View, Animated, TouchableOpacity, Text } from "react-native";
 import {
   Menu,
   MenuOptions,
@@ -13,40 +7,74 @@ import {
   MenuTrigger,
 } from "react-native-popup-menu";
 import { card } from "../globalStyle";
-import { AntDesign } from "@expo/vector-icons";
-import {
-  TouchableWithoutFeedback,
-  TouchableHighlight,
-} from "react-native-gesture-handler";
+import { AntDesign, Entypo } from "@expo/vector-icons";
+import { TouchableHighlight } from "react-native-gesture-handler";
 
 export default class Card extends React.Component {
   constructor() {
     super();
 
+    this.state = {
+      markAsImp: false,
+    };
+
     this.fadeAnim = new Animated.Value(0);
+    this.resizeAnim = new Animated.Value(400);
   }
 
   componentDidMount() {
-    Animated.timing(this.fadeAnim, {
-      toValue: 1,
-      duration: 1000,
-    }).start();
+    Animated.parallel([
+      Animated.timing(this.fadeAnim, {
+        toValue: 1,
+        duration: 500,
+      }),
+      Animated.spring(this.resizeAnim, {
+        toValue: 370,
+        tension: 10,
+        friction: 3,
+      }),
+    ]).start();
   }
 
-  fadeOut = () => {
+  fadeOut = (value) => {
+    console.log("value: ", value);
+
     Animated.timing(this.fadeAnim, {
       toValue: 0,
       duration: 200,
     }).start();
 
-    setTimeout(() => {
-      this.props.onDelete();
-    }, 200);
+    Animated.timing(this.resizeAnim, {
+      toValue: 400,
+      duration: 200,
+    }).start();
+
+    if (value === "delete") {
+      setTimeout(() => {
+        this.props.onDelete();
+      }, 200);
+    } else if (value === "toggle") {
+      setTimeout(() => {
+        this.props.onToggleFinished();
+      }, 200);
+
+      setTimeout(() => {
+        Animated.timing(this.fadeAnim, {
+          toValue: 1,
+          duration: 200,
+        }).start();
+
+        Animated.timing(this.resizeAnim, {
+          toValue: 370,
+          duration: 200,
+        }).start();
+      }, 200);
+    }
   };
 
-  openMenu = () => {
-    this.menu.open();
-  };
+  // openMenu = () => {
+  //   this.menu.open();
+  // };
 
   render() {
     return (
@@ -56,21 +84,30 @@ export default class Card extends React.Component {
         onLongPress={() => this.menu.open()}
       >
         <Animated.View
-          style={{
-            ...card.card,
-            opacity: this.fadeAnim,
-          }}
+          style={
+            this.props.item.markAsImp
+              ? {
+                  ...card.impCard,
+                  opacity: this.fadeAnim,
+                  width: this.resizeAnim,
+                }
+              : {
+                  ...card.card,
+                  opacity: this.fadeAnim,
+                  width: this.resizeAnim,
+                }
+          }
         >
           <View style={card.cardContent}>
             {/* toggle finished */}
             <TouchableOpacity
               style={{ marginLeft: 0, height: 25 }}
-              onPress={this.props.onToggleFinished}
+              onPress={() => this.fadeOut("toggle")}
             >
               {this.props.item.finished === true ? (
                 <AntDesign name="checkcircle" size={24} color="#fca944" />
               ) : (
-                <AntDesign name="checkcircle" size={24} color="#303030" />
+                <AntDesign name="checkcircle" size={24} color="#a3a3a3" />
               )}
             </TouchableOpacity>
             {/* task content */}
@@ -128,7 +165,20 @@ export default class Card extends React.Component {
                 <MenuOption
                   onSelect={this.props.onEdit}
                   text="Edit this task"
-                  style={{ padding: 10, backgroundColor: "#fca944" }}
+                  style={{
+                    paddingTop: 10,
+                    paddingBottom: 10,
+                    backgroundColor: "#fca944",
+                  }}
+                />
+                <MenuOption
+                  onSelect={() => this.props.onMarkAsImp()}
+                  text="Mark as Important"
+                  style={{
+                    paddingTop: 10,
+                    paddingBottom: 10,
+                    backgroundColor: "#fca944",
+                  }}
                 />
               </MenuOptions>
             </Menu>
@@ -136,7 +186,7 @@ export default class Card extends React.Component {
             {/* delete task */}
             <TouchableOpacity
               style={{ marginLeft: "auto", height: 25 }}
-              onPress={this.fadeOut}
+              onPress={() => this.fadeOut("delete")}
             >
               <AntDesign name="closecircle" size={24} color="#fca944" />
             </TouchableOpacity>
