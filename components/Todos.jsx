@@ -11,8 +11,9 @@ import {
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import Card from "./Card";
-import { time } from "./getTime";
+import { time, lightDark } from "./getTime";
 import { todos } from "../globalStyle";
+import { darktodos } from "../darkMode";
 
 export default class Todos extends Component {
   constructor() {
@@ -23,7 +24,8 @@ export default class Todos extends Component {
     this.state = {
       todos: [],
       todoInput: "",
-      finished: false,
+      // finished: false,
+      todoListEmpty: false,
     };
   }
 
@@ -32,9 +34,18 @@ export default class Todos extends Component {
       let data = await AsyncStorage.getItem("a");
       data = JSON.parse(data);
 
-      this.setState({
-        todos: [...data],
-      });
+      this.setState(
+        {
+          todos: [...data],
+        },
+        () => {
+          if (this.state.todos.length === 0) {
+            this.setState({
+              todoListEmpty: true,
+            });
+          }
+        }
+      );
       console.log("Todos: ", this.state.todos);
     } catch (e) {
       let data = [];
@@ -47,6 +58,7 @@ export default class Todos extends Component {
     if (this.state.todoInput === "") {
       ToastAndroid.show("Please enter a todo!", ToastAndroid.SHORT);
     } else {
+      this.setState({ todoListEmpty: false });
       const newTodo = {
         id: Math.random().toString(),
         time: time(),
@@ -71,10 +83,17 @@ export default class Todos extends Component {
   };
 
   onDelete = async (id) => {
-    this.setState({
-      ...this.state,
-      todos: this.state.todos.filter((todo) => todo.id !== id),
-    });
+    this.setState(
+      {
+        ...this.state,
+        todos: this.state.todos.filter((todo) => todo.id !== id),
+      },
+      () => {
+        if (this.state.todos.length === 0) {
+          this.setState({ todoListEmpty: true });
+        }
+      }
+    );
 
     // deleting from asyncStorage
     try {
@@ -85,6 +104,7 @@ export default class Todos extends Component {
     } catch (e) {
       console.log(e);
     }
+
     console.log("deleted: ", id);
   };
 
@@ -107,12 +127,7 @@ export default class Todos extends Component {
     allData.map((person) => {
       if (person.id === id) {
         person.finished = !person.finished;
-
-        if (person.finished === true) {
-          taskDone = true;
-        } else {
-          taskDone = false;
-        }
+        taskDone = person.finished ? true : false;
       }
     });
 
@@ -120,7 +135,7 @@ export default class Todos extends Component {
     let notFinishedTodos = allData.filter((person) => person.id !== id);
     let singleTodo = allData.filter((person) => person.id === id);
 
-    if (taskDone === true) {
+    if (taskDone) {
       notFinishedTodos.push(singleTodo[0]);
     } else {
       notFinishedTodos = [singleTodo[0], ...notFinishedTodos];
@@ -155,15 +170,21 @@ export default class Todos extends Component {
 
   render() {
     return (
-      <View style={todos.container}>
-        {this.state.todos.length === 0 ? (
+      <View style={lightDark() ? todos.container : darktodos.container}>
+        {this.state.todoListEmpty ? (
           <View
             style={{
               flex: 1,
               justifyContent: "center",
             }}
           >
-            <Text style={todos.emptyTodosText}>Enter your First Task!</Text>
+            <Text
+              style={
+                lightDark() ? todos.emptyTodosText : darktodos.emptyTodosText
+              }
+            >
+              Your Notes will appear here!
+            </Text>
           </View>
         ) : null}
 
@@ -184,7 +205,7 @@ export default class Todos extends Component {
           <TextInput
             ref={this.textInput}
             multiline
-            style={todos.todoInput}
+            style={lightDark() ? todos.todoInput : darktodos.todoInput}
             placeholder="Add Task"
             onChangeText={(text) => this.setState({ todoInput: text })}
             value={this.state.todoInput}

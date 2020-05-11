@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 
-export const header = StyleSheet.create({
+export const darkheader = StyleSheet.create({
   header: {
     paddingTop: 30,
     backgroundColor: "#1c1c1c",
@@ -14,18 +14,27 @@ export const header = StyleSheet.create({
   },
 });
 
-export const card = StyleSheet.create({
+export const darkcard = StyleSheet.create({
   card: {
     borderRadius: 8,
     elevation: 3,
     backgroundColor: "#141414",
-    shadowOffset: { width: 1, height: 1 },
-    shadowColor: "#333",
-    shadowOpacity: 0.3,
-    shadowRadius: 2,
     marginHorizontal: 4,
     marginVertical: 6,
+    alignSelf: "center",
   },
+
+  impCard: {
+    borderRadius: 8,
+    elevation: 3,
+    backgroundColor: "#141414",
+    marginHorizontal: 4,
+    marginVertical: 6,
+    alignSelf: "center",
+    borderLeftWidth: 4,
+    borderLeftColor: "#ff5757",
+  },
+
   cardContent: {
     marginHorizontal: 10,
     marginVertical: 10,
@@ -41,7 +50,7 @@ export const card = StyleSheet.create({
   },
 });
 
-export const todos = StyleSheet.create({
+export const darktodos = StyleSheet.create({
   container: {
     flex: 1,
     paddingBottom: 10,
@@ -52,12 +61,10 @@ export const todos = StyleSheet.create({
   emptyTodosText: {
     color: "white",
     fontSize: 20,
-    borderColor: "#A3661C",
-    backgroundColor: "#151d3d",
-    borderWidth: 2,
-    borderRadius: 15,
     alignSelf: "center",
     padding: 20,
+    elevation: 3,
+    opacity: 0.4,
   },
 
   todoInput: {
@@ -70,21 +77,5 @@ export const todos = StyleSheet.create({
     marginBottom: 10,
     width: "90%",
     alignSelf: "center",
-  },
-
-  btn: {
-    alignSelf: "center",
-  },
-
-  bottomPart: {
-    backgroundColor: "#1c1c1c",
-    paddingTop: 20,
-    paddingBottom: 5,
-    marginBottom: -10,
-    // marginTop: 3,
-    alignSelf: "center",
-    width: "110%",
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
   },
 });

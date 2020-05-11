@@ -43,3 +43,9 @@ export const greet = () => {
   else if (hours >= 12 && hours <= 17) return "Good Afternoon!";
   else return "Good Evening!";
 };
+
+export const lightDark = () => {
+  let date = new Date();
+  if (date.getHours >= 0 && date.getHours < 19) return true;
+  else return true;
+};

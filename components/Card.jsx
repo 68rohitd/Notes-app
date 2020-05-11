@@ -7,6 +7,8 @@ import {
   MenuTrigger,
 } from "react-native-popup-menu";
 import { card } from "../globalStyle";
+import { darkcard } from "../darkMode";
+import { lightDark } from "./getTime";
 import { AntDesign, Entypo } from "@expo/vector-icons";
 import { TouchableHighlight } from "react-native-gesture-handler";
 
@@ -80,25 +82,41 @@ export default class Card extends React.Component {
     return (
       <TouchableHighlight
         activeOpacity={0.8}
-        underlayColor="#ebebeb"
+        underlayColor={lightDark() ? "#ebebeb" : "#2b2b2b"}
         onLongPress={() => this.menu.open()}
       >
         <Animated.View
           style={
             this.props.item.markAsImp
+              ? lightDark()
+                ? {
+                    //important card and daytime
+                    ...card.impCard,
+                    opacity: this.fadeAnim,
+                    width: this.resizeAnim,
+                  }
+                : {
+                    //important card and nighttime
+                    ...darkcard.impCard,
+                    opacity: this.fadeAnim,
+                    width: this.resizeAnim,
+                  }
+              : lightDark()
               ? {
-                  ...card.impCard,
+                  //normal card and daytime
+                  ...card.card,
                   opacity: this.fadeAnim,
                   width: this.resizeAnim,
                 }
               : {
-                  ...card.card,
+                  //normal card and nighttime
+                  ...darkcard.card,
                   opacity: this.fadeAnim,
                   width: this.resizeAnim,
                 }
           }
         >
-          <View style={card.cardContent}>
+          <View style={lightDark() ? card.cardContent : darkcard.cardContent}>
             {/* toggle finished */}
             <TouchableOpacity
               style={{ marginLeft: 0, height: 25 }}
@@ -118,19 +136,34 @@ export default class Card extends React.Component {
                     style={{ marginHorizontal: 5, marginBottom: 5 }}
                     name="clockcircleo"
                     size={15}
-                    color="black"
+                    color={lightDark() ? "black" : "white"}
                   />
-                  <Text style={{ color: "black", fontSize: 10 }}>
+                  <Text
+                    style={
+                      lightDark()
+                        ? { color: "black", fontSize: 10 }
+                        : { color: "white", fontSize: 10 }
+                    }
+                  >
                     {this.props.item.time}
                   </Text>
                 </View>
                 <Text
-                  style={{
-                    ...card.todoItem,
-                    textDecorationLine: "line-through",
-                    textDecorationStyle: "solid",
-                    opacity: 0.4,
-                  }}
+                  style={
+                    lightDark()
+                      ? {
+                          ...card.todoItem,
+                          textDecorationLine: "line-through",
+                          textDecorationStyle: "solid",
+                          opacity: 0.4,
+                        }
+                      : {
+                          ...darkcard.todoItem,
+                          textDecorationLine: "line-through",
+                          textDecorationStyle: "solid",
+                          opacity: 0.4,
+                        }
+                  }
                 >
                   {this.props.item.name}
                 </Text>
@@ -142,13 +175,21 @@ export default class Card extends React.Component {
                     style={{ marginHorizontal: 5, marginBottom: 5 }}
                     name="clockcircleo"
                     size={15}
-                    color="black"
+                    color={lightDark() ? "black" : "white"}
                   />
-                  <Text style={{ color: "black", fontSize: 10 }}>
+                  <Text
+                    style={
+                      lightDark()
+                        ? { color: "black", fontSize: 10 }
+                        : { color: "white", fontSize: 10 }
+                    }
+                  >
                     {this.props.item.time}
                   </Text>
                 </View>
-                <Text style={card.todoItem}>{this.props.item.name}</Text>
+                <Text style={lightDark() ? card.todoItem : darkcard.todoItem}>
+                  {this.props.item.name}
+                </Text>
               </View>
             )}
 
@@ -168,16 +209,20 @@ export default class Card extends React.Component {
                   style={{
                     paddingTop: 10,
                     paddingBottom: 10,
-                    backgroundColor: "#fca944",
+                    backgroundColor: "#ffc987",
                   }}
                 />
                 <MenuOption
-                  onSelect={() => this.props.onMarkAsImp()}
-                  text="Mark as Important"
+                  onSelect={this.props.onMarkAsImp}
+                  text={
+                    this.props.item.markAsImp
+                      ? "Unmark as Important"
+                      : "Mark as Important"
+                  }
                   style={{
                     paddingTop: 10,
                     paddingBottom: 10,
-                    backgroundColor: "#fca944",
+                    backgroundColor: "#ffc987",
                   }}
                 />
               </MenuOptions>

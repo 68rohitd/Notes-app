@@ -19,7 +19,7 @@ export const header = StyleSheet.create({
 export const card = StyleSheet.create({
   card: {
     borderRadius: 8,
-    elevation: 3,
+    elevation: 2,
     backgroundColor: "white",
     marginHorizontal: 4,
     marginVertical: 6,
@@ -28,7 +28,7 @@ export const card = StyleSheet.create({
 
   impCard: {
     borderRadius: 8,
-    elevation: 3,
+    elevation: 2,
     backgroundColor: "white",
     marginHorizontal: 4,
     marginVertical: 6,
@@ -41,7 +41,6 @@ export const card = StyleSheet.create({
     marginHorizontal: 10,
     marginVertical: 10,
     flexDirection: "row",
-    // width: 300,
   },
 
   todoItem: {
@@ -62,15 +61,12 @@ export const todos = StyleSheet.create({
   },
 
   emptyTodosText: {
-    color: "#303030",
+    color: "black",
     fontSize: 20,
-    borderColor: "#fca944",
-    backgroundColor: "white",
-    borderWidth: 2,
-    borderRadius: 15,
     alignSelf: "center",
     padding: 20,
     elevation: 3,
+    opacity: 0.4,
   },
 
   todoInput: {
