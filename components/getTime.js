@@ -46,6 +46,6 @@ export const greet = () => {
 
 export const lightDark = () => {
   let date = new Date();
-  if (date.getHours >= 0 && date.getHours < 19) return true;
-  else return true;
+  if (date.getHours() >= 3 && date.getHours() < 19) return true;
+  else return false;
 };
