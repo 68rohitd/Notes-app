@@ -56,7 +56,7 @@ export const todos = StyleSheet.create({
   container: {
     flex: 1,
     paddingBottom: 10,
-    paddingHorizontal: 10,
+    // paddingHorizontal: 10,
     backgroundColor: "#ebebeb",
   },
 
@@ -69,6 +69,14 @@ export const todos = StyleSheet.create({
     opacity: 0.4,
   },
 
+  bottomPart: {
+    // backgroundColor: "green",
+    paddingTop: 20,
+    paddingBottom: 5,
+    paddingHorizontal: 10,
+    flexDirection: "row",
+  },
+
   todoInput: {
     backgroundColor: "white",
     borderWidth: 2,
@@ -77,21 +85,18 @@ export const todos = StyleSheet.create({
     padding: 10,
     fontSize: 18,
     borderRadius: 15,
-    marginBottom: 10,
-    width: "90%",
-    alignSelf: "center",
+    marginRight: 10,
+    width: "85%",
+    // alignSelf: "flex-start",
     elevation: 1,
+    // flex: 3,
   },
 
   btn: {
-    alignSelf: "center",
-  },
-
-  bottomPart: {
-    paddingTop: 20,
-    paddingBottom: 5,
-    marginBottom: -10,
-    alignSelf: "center",
-    width: "110%",
+    // flex: 1,
+    // marginHorizontal: 5,
+    // marginBottom: 10,
+    // alignItems: "center",
+    // alignSelf: "flex-end",
   },
 });

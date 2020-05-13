@@ -212,7 +212,8 @@ export default class Todos extends Component {
           />
           <TouchableOpacity
             style={{
-              width: 50,
+              // backgroundColor: "pink",
+              // width: 50,
               alignSelf: "center",
             }}
             onPress={this.onAdd}

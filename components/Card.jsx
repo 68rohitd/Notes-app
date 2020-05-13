@@ -1,5 +1,11 @@
 import React from "react";
-import { View, Animated, TouchableOpacity, Text } from "react-native";
+import {
+  View,
+  Animated,
+  TouchableOpacity,
+  Text,
+  Dimensions,
+} from "react-native";
 import {
   Menu,
   MenuOptions,
@@ -16,12 +22,16 @@ export default class Card extends React.Component {
   constructor() {
     super();
 
-    this.state = {
-      markAsImp: false,
-    };
+    // this.state = {
+    //   markAsImp: false,
+    // };
+
+    this.windowWidth = Dimensions.get("window").width;
+    this.windowHeight = Dimensions.get("window").height;
+    console.log(this.windowHeight, this.windowWidth);
 
     this.fadeAnim = new Animated.Value(0);
-    this.resizeAnim = new Animated.Value(400);
+    this.resizeAnim = new Animated.Value(this.windowWidth + 23);
   }
 
   componentDidMount() {
@@ -31,7 +41,7 @@ export default class Card extends React.Component {
         duration: 500,
       }),
       Animated.spring(this.resizeAnim, {
-        toValue: 370,
+        toValue: this.windowWidth - 23,
         tension: 10,
         friction: 3,
       }),
@@ -47,7 +57,7 @@ export default class Card extends React.Component {
     }).start();
 
     Animated.timing(this.resizeAnim, {
-      toValue: 400,
+      toValue: this.windowWidth + 23,
       duration: 200,
     }).start();
 
@@ -67,7 +77,7 @@ export default class Card extends React.Component {
         }).start();
 
         Animated.timing(this.resizeAnim, {
-          toValue: 370,
+          toValue: this.windowWidth - 23,
           duration: 200,
         }).start();
       }, 200);
